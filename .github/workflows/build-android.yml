@@ -38,15 +38,19 @@ jobs:
         with:
           targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
 
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2.0" --locked
+
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build Android APK
         env:
           CI: "true"
         run: |
-          pnpm tauri android init || true
-          pnpm tauri android build --apk
+          pnpm run build
+          cargo tauri android init || true
+          cargo tauri android build --apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
